@@ -2,6 +2,7 @@
 extern crate lazy_static;
 
 use std::collections::HashMap;
+
 use actix_web::{App, get, HttpResponse, HttpServer, web};
 use async_std::task;
 use rand::Rng;
@@ -39,17 +40,17 @@ async fn check_sum(web::Path((package_name, version)): web::Path<(String, String
         return HttpResponse::BadRequest().finish();
     }
     println!("Received request for package {} with version {}", package_name, version);
-    let requested_package = Package { name: package_name, version: version };
+    let requested_package = Package { name: package_name, version };
     let pkg = PACKAGE_MAP.get(&requested_package);
     if pkg.is_none() {
         println!("Package {} with version {} does not exist.",
                  requested_package.name, requested_package.version);
-        return HttpResponse::NotFound().finish()
+        return HttpResponse::NotFound().finish();
     }
     let hash = pkg.unwrap();
     println!("Package {} with version {} has hash {}.",
              requested_package.name, requested_package.version, hash);
-    return HttpResponse::Ok().body(hash);
+    HttpResponse::Ok().body(hash)
 }
 
 async fn sleep_time() {
