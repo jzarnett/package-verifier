@@ -7,6 +7,7 @@ use actix_web::{App, get, HttpResponse, HttpServer, web};
 use async_std::task;
 use rand::Rng;
 use tokio::time::Duration;
+use urlencoding::decode;
 
 const NANOS_TO_MS: u32 = 1000000;
 
@@ -34,7 +35,8 @@ lazy_static! {
 }
 
 #[get("/rest/v1/checksums/{package_name}/{version}")]
-async fn check_sum(web::Path((package_name, version)): web::Path<(String, String)>) -> HttpResponse {
+async fn check_sum(web::Path((package_name, v)): web::Path<(String, String)>) -> HttpResponse {
+    let version = decode(&v).expect("UTF-8").to_string();
     sleep_time().await;
     if package_name.is_empty() || version.is_empty() {
         return HttpResponse::BadRequest().finish();
