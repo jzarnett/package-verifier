@@ -40,3 +40,12 @@ The server looks for a file called `packages.csv` that contains the package info
 in csv, of course, with each row being `name,version,hash`. **Note that the Rust CSV parser assumes there are headers.**
 If you don't put them then the first row will be ignored and that's unlikely to be what
 you actually wanted.
+
+
+# Version History
+
+### 0.1.1
+Dependency updates
+
+### 0.1.0
+Initial version
